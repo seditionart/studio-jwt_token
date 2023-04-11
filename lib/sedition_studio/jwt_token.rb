@@ -8,9 +8,10 @@ require_relative "jwt_token/jwt"
 module SeditionStudio
   # Sedition Website App aujwtthentication token.
   module JwtToken
-    extend Jwt
-
     class Error < StandardError; end
+    class Invalid < Error; end
+
+    extend Jwt
 
     class << self
       attr_accessor :configuration
@@ -38,8 +39,14 @@ module SeditionStudio
       end
 
       # @return [Hash,nil]
+      # @raise [Invalid]
       def jwt_token_payload(jwt_token)
-        jwt_decode(jwt_token)&.first
+        begin
+          result = jwt_decode(jwt_token)
+        rescue JWT::DecodeError => e
+          raise(SeditionStudio::JwtToken::Invalid, "Unable to decode invalid token (#{e.message}).")
+        end
+        result.first
       end
     end
   end

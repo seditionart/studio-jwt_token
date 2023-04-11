@@ -28,6 +28,13 @@ RSpec.describe SeditionStudio::JwtToken do
     end
   end
 
+  context "when jwt_token is invalid" do
+    let(:jwt_token) { "invalid format" }
+    it "#auth_token_match? raises SeditionStudio::JwtToken::Invalid " do
+      expect { described_class.auth_token_match?(jwt_token) }.to raise_error(SeditionStudio::JwtToken::Invalid)
+    end
+  end
+
   describe "with additional parameters (payload)" do
     let(:jwt_token) { described_class.generate_jwt_token(artist: "Michelangelo") }
 

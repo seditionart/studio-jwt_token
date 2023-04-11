@@ -11,7 +11,7 @@ Encode/decode an app auth token via JWT.
 Include gem
 
 ```ruby
-gem 'sedition_studio-jwt_token', git: 'https://github.com/seditionart/sedition_studio-jwt_token.git'
+gem 'sedition_studio-jwt_token', '~> 0.2 ', git: 'https://github.com/seditionart/sedition_studio-jwt_token.git'
 ```
 
 ## Usage
