@@ -7,9 +7,9 @@ module SeditionStudio
       attr_reader :auth_token, :jwt_hmac_secret, :jwt_algorithm
 
       def initialize(jwt_hmac_secret: nil, jwt_algorithm: nil, auth_token: nil)
-        @jwt_hmac_secret = ENV.fetch("STUDIO_JWT_HMAC_SECRET", nil) || jwt_hmac_secret
-        @jwt_algorithm = ENV.fetch("STUDIO_JWT_ALGORITHM", nil) || jwt_algorithm
-        @auth_token = ENV.fetch("STUDIO_AUTH_TOKEN", nil) || auth_token
+        @jwt_hmac_secret = jwt_hmac_secret || ENV.fetch("STUDIO_JWT_HMAC_SECRET", nil)
+        @jwt_algorithm = jwt_algorithm || ENV.fetch("STUDIO_JWT_ALGORITHM", nil)
+        @auth_token = auth_token || ENV.fetch("STUDIO_AUTH_TOKEN", nil)
       end
     end
   end

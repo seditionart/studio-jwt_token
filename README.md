@@ -67,6 +67,27 @@ SeditionStudio::JwtToken.jwt_token_payload(jwt_token)
 SeditionStudio::JwtToken.auth_token_match?(jwt_token)
 ```
 
+The following raises `SeditionStudio::JwtToken::MatchError` if the auth tokens don't math.
+
+```ruby
+SeditionStudio::JwtToken.auth_token_match!(jwt_token)
+```
+
+## Example client request header
+
+* Using default configuration (`SeditionStudio::JwtToken.config`) for this example.
+
+```ruby
+def header
+  {
+    "Content-Type" => "application/json",
+    "Cache-Control" => "no-cache",
+    SeditionStudio::JwtToken::DEFAULT_HEADER_NAME => "Bearer #{SeditionStudio::JwtToken.generate_jwt_token}",
+    "User-Agent" => SeditionStudio::Graphql.configuration.user_agent
+  }
+end
+```
+
 ## Testing
 
 ```bash
