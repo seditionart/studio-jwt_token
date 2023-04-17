@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-module SeditionStudio
+module Studio
   module JwtToken
-    VERSION = "0.4.0"
+    VERSION = "1.0.0"
   end
 end

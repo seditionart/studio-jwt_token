@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "sedition_studio/jwt_token"
+require "studio/jwt_token"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

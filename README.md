@@ -1,4 +1,4 @@
-# SeditionStudio::JwtToken
+# Studio::JwtToken
 
 ## About
 
@@ -11,7 +11,7 @@ Encode/decode an app auth token via JWT.
 Include gem
 
 ```ruby
-gem 'sedition_studio-jwt_token', '~> 0.2 ', git: 'https://github.com/seditionart/sedition_studio-jwt_token.git'
+gem 'studio-jwt_token', '~> 0.2 ', git: 'https://github.com/seditionart/studio-jwt_token.git'
 ```
 
 ## Usage
@@ -25,7 +25,7 @@ Include the gem in both applications with identical configuration.
 Create an initializer `studio_auth.rb`
 
 ```ruby
-SeditionStudio::JwtToken.config do |config|
+Studio::JwtToken.config do |config|
   config.jwt_algorithm = Rails.application.credentials.jwt_token[:jwt_algorithm]
   config.jwt_hmac_secret = Rails.application.credentials.jwt_token[:jwt_hmac_secret]
   config.auth_token = Rails.application.credentials.jwt_token[:auth_token]
@@ -40,50 +40,50 @@ There is also the option to overwrite all/some of the parameters through environ
 * STUDIO_AUTH_TOKEN : the shared access token
 
 ```ruby
-SeditionStudio::JwtToken.config
+Studio::JwtToken.config
 ```
 
 With auth_token only
 
 ```ruby
-SeditionStudio::JwtToken.generate_jwt_token
+Studio::JwtToken.generate_jwt_token
 ```
 
 With auth_token and additional payload
 
 ```ruby
-SeditionStudio::JwtToken.generate_jwt_token scope: 'artworks', artist: 'Jack Reacher'
+Studio::JwtToken.generate_jwt_token scope: 'artworks', artist: 'Jack Reacher'
 ```
 
 ### Get Payload
 
 ```ruby
-SeditionStudio::JwtToken.jwt_token_payload(jwt_token)
+Studio::JwtToken.jwt_token_payload(jwt_token)
 ```
 
 ### Compare auth_token with local
 
 ```ruby
-SeditionStudio::JwtToken.auth_token_match?(jwt_token)
+Studio::JwtToken.auth_token_match?(jwt_token)
 ```
 
-The following raises `SeditionStudio::JwtToken::MatchError` if the auth tokens don't math.
+The following raises `Studio::JwtToken::MatchError` if the auth tokens don't math.
 
 ```ruby
-SeditionStudio::JwtToken.auth_token_match!(jwt_token)
+Studio::JwtToken.auth_token_match!(jwt_token)
 ```
 
 ## Example client request header
 
-* Using default configuration (`SeditionStudio::JwtToken.config`) for this example.
+* Using default configuration (`Studio::JwtToken.config`) for this example.
 
 ```ruby
 def header
   {
     "Content-Type" => "application/json",
     "Cache-Control" => "no-cache",
-    SeditionStudio::JwtToken::DEFAULT_HEADER_NAME => "Bearer #{SeditionStudio::JwtToken.generate_jwt_token}",
-    "User-Agent" => SeditionStudio::Graphql.configuration.user_agent
+    Studio::JwtToken::DEFAULT_HEADER_NAME => "Bearer #{Studio::JwtToken.generate_jwt_token}",
+    "User-Agent" => Studio::Graphql.configuration.user_agent
   }
 end
 ```

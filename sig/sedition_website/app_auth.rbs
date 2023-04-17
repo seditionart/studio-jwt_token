@@ -1,4 +1,4 @@
-module SeditionStudio
+module Studio
   module JwtToken
     VERSION: String
     # See the writing guide of rbs: https://github.com/ruby/rbs#guides

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe SeditionStudio::JwtToken do
+RSpec.describe Studio::JwtToken do
   let(:auth_token) { "auth_token-value" }
 
   let(:jwt_token) { described_class.jwt_encode(auth_token: auth_token) }
@@ -30,16 +30,16 @@ RSpec.describe SeditionStudio::JwtToken do
 
   context "when jwt_token is invalid" do
     let(:jwt_token) { "invalid format" }
-    it "#auth_token_match? raises SeditionStudio::JwtToken::Invalid " do
-      expect { described_class.auth_token_match?(jwt_token) }.to raise_error(SeditionStudio::JwtToken::Invalid)
+    it "#auth_token_match? raises Studio::JwtToken::Invalid " do
+      expect { described_class.auth_token_match?(jwt_token) }.to raise_error(Studio::JwtToken::Invalid)
     end
   end
 
   context "when auth_token is not matching" do
     let(:auth_token) { "auth_token-different-value" }
 
-    it "#auth_token_match! raises SeditionStudio::JwtToken::MatchError " do
-      expect { described_class.auth_token_match!(jwt_token) }.to raise_error(SeditionStudio::JwtToken::MatchError)
+    it "#auth_token_match! raises Studio::JwtToken::MatchError " do
+      expect { described_class.auth_token_match!(jwt_token) }.to raise_error(Studio::JwtToken::MatchError)
     end
   end
 

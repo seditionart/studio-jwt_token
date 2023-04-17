@@ -2,7 +2,7 @@
 
 require "jwt"
 
-module SeditionStudio
+module Studio
   # Sedition Website App authentication token.
   module JwtToken
     module Jwt

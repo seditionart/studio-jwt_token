@@ -6,4 +6,4 @@
 
 ## [0.3.0] - 2023-04-11
 
-- Raise SeditionStudio::JwtToken::Invalid on invalid token
+- Raise Studio::JwtToken::Invalid on invalid token

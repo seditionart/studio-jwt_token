@@ -2,7 +2,7 @@
 
 source "https://rubygems.org"
 
-# Specify your gem's dependencies in sedition_studio-jwt_token.gemspec
+# Specify your gem's dependencies in studio-jwt_token.gemspec
 gemspec
 
 gem "rake", "~> 13.0"

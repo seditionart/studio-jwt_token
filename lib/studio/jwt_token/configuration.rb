@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module SeditionStudio
+module Studio
   module JwtToken
     # JwtToken Configuration
     class Configuration

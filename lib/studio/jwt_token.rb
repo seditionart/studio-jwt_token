@@ -5,7 +5,7 @@ require_relative "jwt_token/version"
 require_relative "jwt_token/configuration"
 require_relative "jwt_token/jwt"
 
-module SeditionStudio
+module Studio
   # Sedition Website App aujwtthentication token.
   module JwtToken
     class Error < StandardError; end
@@ -58,7 +58,7 @@ module SeditionStudio
         begin
           result = jwt_decode(jwt_token)
         rescue JWT::DecodeError => e
-          raise(SeditionStudio::JwtToken::Invalid, "Unable to decode invalid token (#{e.message}).")
+          raise(Studio::JwtToken::Invalid, "Unable to decode invalid token (#{e.message}).")
         end
         result.first
       end
