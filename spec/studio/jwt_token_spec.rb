@@ -5,8 +5,17 @@ RSpec.describe Studio::JwtToken do
 
   let(:jwt_token) { described_class.jwt_encode(auth_token: auth_token) }
 
+  let(:new_value) { "new value" }
+
   before do
     described_class.configure auth_token:
+  end
+
+  it "#configure works" do
+    described_class.configure do |config|
+      config.jwt_hmac_secret = new_value
+    end
+    expect(described_class.configuration.jwt_hmac_secret).to eq new_value
   end
 
   it "#auth_token returns String" do
