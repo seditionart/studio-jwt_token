@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 require "studio/jwt_token"
+require "dotenv/load"
+Dotenv.load(".env.test")
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

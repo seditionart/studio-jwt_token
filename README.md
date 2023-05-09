@@ -11,7 +11,7 @@ Encode/decode an app auth token via JWT.
 Include gem
 
 ```ruby
-gem 'studio-jwt_token', '~> 0.2 ', git: 'https://github.com/seditionart/studio-jwt_token.git'
+gem 'studio-jwt_token', '~> 1.1 ', git: 'https://github.com/seditionart/studio-jwt_token.git'
 ```
 
 ## Usage
@@ -40,7 +40,7 @@ There is also the option to overwrite all/some of the parameters through environ
 * STUDIO_AUTH_TOKEN : the shared access token
 
 ```ruby
-Studio::JwtToken.config
+Studio::JwtToken.configure
 ```
 
 With auth_token only
@@ -75,7 +75,7 @@ Studio::JwtToken.auth_token_match!(jwt_token)
 
 ## Example client request header
 
-* Using default configuration (`Studio::JwtToken.config`) for this example.
+* Using default configuration (`Studio::JwtToken.configuration`) for this example.
 
 ```ruby
 def header
@@ -90,8 +90,9 @@ end
 
 ## Testing
 
+Copy source .env.sample to .env.test.
+
 ```bash
-source .env.sample
 bundle exec rspec
 ```
 
