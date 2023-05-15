@@ -25,6 +25,10 @@ RSpec.describe Studio::JwtToken::Payload do
                         expiry: expiry
   end
 
+  before do
+    Studio::JwtToken.configure
+  end
+
   it "#initialize" do
     expect(payload).to be_an_instance_of described_class
   end
@@ -32,6 +36,11 @@ RSpec.describe Studio::JwtToken::Payload do
   it "#to_h works" do
     expect(payload.to_h).to be_an_instance_of Hash
     puts JSON.pretty_generate payload.to_h
+  end
+
+  it "#token works" do
+    expect(payload.token).to be_an_instance_of String
+    puts payload.token
   end
 
   describe "Create a token with the payload" do

@@ -49,6 +49,11 @@ module Studio
           scope: "openid profile #{scopes.join}"
         }
       end
+
+      # @return [String]
+      def token
+        JwtToken.jwt_encode to_h
+      end
     end
   end
 end

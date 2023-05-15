@@ -27,20 +27,23 @@ module Studio
         configuration
       end
 
-      def generate_jwt_token(payload = {}, **kwargs)
+      def generate(payload = {}, **kwargs)
         jwt_encode(payload, **kwargs)
       end
 
-      # The auth token
-      def auth_token
-        configuration.auth_token
+      def jwt_secret
+        configuration&.jwt_hmac_secret
+      end
+
+      def jwt_algorithm
+        configuration&.jwt_algorithm
       end
 
       # @return [Hash,nil]
       # @raise [Invalid]
       def jwt_token_payload(jwt_token)
         begin
-          result = jwt_decode(jwt_token)
+          result = decode(jwt_token)
         rescue JWT::DecodeError => e
           raise(Studio::JwtToken::Invalid, "Unable to decode invalid token (#{e.message}).")
         end

@@ -46,13 +46,13 @@ Studio::JwtToken.configure
 With auth_token only
 
 ```ruby
-Studio::JwtToken.generate_jwt_token
+Studio::JwtToken.generate
 ```
 
 With auth_token and additional payload
 
 ```ruby
-Studio::JwtToken.generate_jwt_token scope: 'artworks', artist: 'Jack Reacher'
+Studio::JwtToken.generate { scope: 'artworks', artist: 'Jack Reacher' }
 ```
 
 ### Get Payload
@@ -82,7 +82,7 @@ def header
   {
     "Content-Type" => "application/json",
     "Cache-Control" => "no-cache",
-    Studio::JwtToken::DEFAULT_HEADER_NAME => "Bearer #{Studio::JwtToken.generate_jwt_token}",
+    Studio::JwtToken::DEFAULT_HEADER_NAME => "Bearer #{Studio::JwtToken.generate}",
     "User-Agent" => Studio::Graphql.configuration.user_agent
   }
 end

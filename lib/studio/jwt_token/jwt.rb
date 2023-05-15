@@ -13,8 +13,9 @@ module Studio
       # @param algorithm [String]
       # @return [String]
       def jwt_encode(payload,
-                     secret: JwtToken.configuration.jwt_hmac_secret,
-                     algorithm: JwtToken.configuration.jwt_algorithm)
+                     secret: JwtToken.jwt_secret,
+                     algorithm: JwtToken.jwt_algorithm)
+        puts "payload: #{payload} secret: #{secret} algorithm: #{algorithm}"
         JWT.encode payload,
                    secret,
                    algorithm,
@@ -25,9 +26,9 @@ module Studio
       # @param secret [String]
       # @param algorithm [String]
       # @return [Array]
-      def jwt_decode(jwt_token,
-                     secret: JwtToken.configuration.jwt_hmac_secret,
-                     algorithm: JwtToken.configuration.jwt_algorithm)
+      def decode(jwt_token,
+                 secret: JwtToken.jwt_secret,
+                 algorithm: JwtToken.jwt_algorithm)
         JWT.decode jwt_token,
                    secret,
                    true,

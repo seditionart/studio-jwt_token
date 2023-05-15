@@ -17,16 +17,16 @@ RSpec.describe Studio::JwtToken do
     expect(described_class.configuration.jwt_hmac_secret).to eq new_value
   end
 
-  it "#generate_jwt_token" do
-    expect(described_class.generate_jwt_token).to be_an_instance_of String
+  it "#generate without payload" do
+    expect(described_class.generate).to be_an_instance_of String
   end
 
   describe "with additional parameters (payload)" do
     let(:payload) { { artist: "Michelangelo" } }
-    let(:jwt_token) { described_class.generate_jwt_token(payload) }
+    let(:jwt_token) { described_class.generate(payload) }
 
     it "decodes additional parameters" do
-      expect(described_class.jwt_decode(jwt_token).first.keys).to include "artist"
+      expect(described_class.decode(jwt_token).first.keys).to include "artist"
     end
   end
 end
