@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 require "jwt"
+require "openssl"
+require "securerandom"
 
 module Studio
   # Sedition Website App authentication token.
@@ -9,7 +11,7 @@ module Studio
     module Jwt
       # @param payload [Hash]
       # @param jwt_token [String]
-      # @param secret [String]
+      # @param secret [String, OpenSSL::PKey::RSA]
       # @param algorithm [String]
       # @param kid [String]
       # @return [String]
@@ -17,7 +19,7 @@ module Studio
                      secret: JwtToken.jwt_secret,
                      algorithm: JwtToken.jwt_algorithm,
                      kid: SecureRandom.hex)
-        puts "payload: #{payload} secret: #{secret} algorithm: #{algorithm}"
+
         JWT.encode payload,
                    secret,
                    algorithm,
@@ -31,11 +33,16 @@ module Studio
       def decode(jwt_token,
                  secret: JwtToken.jwt_secret,
                  algorithm: JwtToken.jwt_algorithm)
+
         JWT.decode jwt_token,
                    secret,
                    true,
                    { algorithm: algorithm }
       end
+
+      # def rsa_private
+      #   OpenSSL::PKey::RSA.generate 2048
+      # end
     end
   end
 end

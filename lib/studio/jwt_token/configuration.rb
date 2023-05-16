@@ -4,11 +4,12 @@ module Studio
   module JwtToken
     # JwtToken Configuration
     class Configuration
-      attr_accessor :jwt_hmac_secret, :jwt_algorithm
+      attr_accessor :jwt_hmac_secret, :jwt_algorithm, :comment
 
-      def initialize(jwt_hmac_secret: nil, jwt_algorithm: nil, auth_token: nil)
+      def initialize(jwt_hmac_secret: nil, jwt_algorithm: nil)
         @jwt_hmac_secret = jwt_hmac_secret || ENV.fetch("STUDIO_JWT_HMAC_SECRET", nil)
         @jwt_algorithm = jwt_algorithm || ENV.fetch("STUDIO_JWT_ALGORITHM", nil)
+        @comment = comment
       end
     end
   end

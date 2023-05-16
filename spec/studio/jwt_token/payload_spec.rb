@@ -26,7 +26,7 @@ RSpec.describe Studio::JwtToken::Payload do
   end
 
   before do
-    Studio::JwtToken.configure
+    Studio::JwtToken.configure jwt_hmac_secret: OpenSSL::PKey::RSA.generate(2048)
   end
 
   it "#initialize" do
@@ -44,10 +44,11 @@ RSpec.describe Studio::JwtToken::Payload do
   end
 
   describe "Create a token with the payload" do
-    let(:jwt_secret) { ENV.fetch("STUDIO_DEV_AUTH0_CLIENT_SECRET", nil) }
+    # let(:jwt_secret) { ENV.fetch("STUDIO_DEV_AUTH0_CLIENT_SECRET", nil) }
+    let(:secret) { OpenSSL::PKey::RSA.generate 2048 }
     let(:jwt_algorithm) { ENV["STUDIO_JWT_ALGORITHM"] }
 
-    let(:token) { JWT.encode payload.to_h, jwt_secret, jwt_algorithm, { typ: "JWT", kid: SecureRandom.hex } }
+    let(:token) { JWT.encode payload.to_h, secret, jwt_algorithm, { typ: "JWT", kid: SecureRandom.hex } }
 
     let(:header) do
       {
@@ -59,7 +60,6 @@ RSpec.describe Studio::JwtToken::Payload do
     end
 
     it "#creates token" do
-      puts token
       expect(token).to be_an_instance_of String
     end
   end

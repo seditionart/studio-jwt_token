@@ -1,20 +1,20 @@
 # frozen_string_literal: true
 
 RSpec.describe Studio::JwtToken do
+  before do
+    Studio::JwtToken.configure jwt_hmac_secret: OpenSSL::PKey::RSA.generate(2048)
+  end
+
   let(:payload) { { "key" => "value" } }
   let(:jwt_token) { described_class.jwt_encode(payload) }
 
   let(:new_value) { "new value" }
 
-  before do
-    described_class.configure
-  end
-
   it "#configure works" do
     described_class.configure do |config|
-      config.jwt_hmac_secret = new_value
+      config.comment = new_value
     end
-    expect(described_class.configuration.jwt_hmac_secret).to eq new_value
+    expect(described_class.configuration.comment).to eq new_value
   end
 
   it "#generate without payload" do
