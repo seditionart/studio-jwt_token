@@ -44,7 +44,7 @@ RSpec.describe Studio::JwtToken::Payload do
   end
 
   describe "Create a token with the payload" do
-    let(:jwt_secret) { ENV.fetch("STUDIO_DEV_AUTH0_CLIENT_SECRET") }
+    let(:jwt_secret) { ENV.fetch("STUDIO_DEV_AUTH0_CLIENT_SECRET", nil) }
     let(:jwt_algorithm) { ENV["STUDIO_JWT_ALGORITHM"] }
 
     let(:token) { JWT.encode payload.to_h, jwt_secret, jwt_algorithm, { typ: "JWT", kid: SecureRandom.hex } }

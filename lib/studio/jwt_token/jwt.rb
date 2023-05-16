@@ -11,15 +11,17 @@ module Studio
       # @param jwt_token [String]
       # @param secret [String]
       # @param algorithm [String]
+      # @param kid [String]
       # @return [String]
       def jwt_encode(payload,
                      secret: JwtToken.jwt_secret,
-                     algorithm: JwtToken.jwt_algorithm)
+                     algorithm: JwtToken.jwt_algorithm,
+                     kid: SecureRandom.hex)
         puts "payload: #{payload} secret: #{secret} algorithm: #{algorithm}"
         JWT.encode payload,
                    secret,
                    algorithm,
-                   { type: "JWT", kid: SecureRandom.hex }
+                   { type: "JWT", kid: kid }.compact
       end
 
       # @param jwt_token [String]
