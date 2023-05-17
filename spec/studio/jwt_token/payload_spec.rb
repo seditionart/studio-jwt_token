@@ -44,16 +44,16 @@ RSpec.describe Studio::JwtToken::Payload do
   end
 
   describe "RS256" do
-    let(:jwt_algorithm) { "RS256" }
+    let(:algorithm) { "RS256" }
 
     let(:rsa_key) { OpenSSL::PKey::RSA.generate 2048 }
 
     let(:token) do
-      Studio::JwtToken.encode payload.to_h, secret: rsa_key, algorithm: jwt_algorithm, kid: SecureRandom.hex
+      Studio::JwtToken.encode payload.to_h, secret: rsa_key, algorithm: algorithm, kid: SecureRandom.hex
     end
 
     let(:decoded) do
-      Studio::JwtToken.decode token, secret: rsa_key.public_key, algorithm: jwt_algorithm
+      Studio::JwtToken.decode token, secret: rsa_key.public_key, algorithm: algorithm
     end
 
     let(:header) do

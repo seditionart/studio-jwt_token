@@ -26,7 +26,7 @@ Create an initializer `studio_auth.rb`
 
 ```ruby
 Studio::JwtToken.config do |config|
-  config.jwt_algorithm = Rails.application.credentials.jwt_token[:jwt_algorithm]
+  config.algorithm = Rails.application.credentials.jwt_token[:algorithm]
   config.private_key = ...
   config.public_key = ...
   config.secret = ...
@@ -62,7 +62,7 @@ For Auth0
 
 ```ruby
 Studio::JwtToken.configure do |config|
-  config.jwt_algorithm = ENV['STUDIO_JWT_ALGORITHM']
+  config.algorithm = ENV['STUDIO_JWT_ALGORITHM']
   config.private_key = ENV['STUDIO_JWT_PRIVATE_KEY']
 end
 ```

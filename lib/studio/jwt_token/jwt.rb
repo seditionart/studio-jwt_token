@@ -10,12 +10,12 @@ module Studio
     class Jwt
       attr_reader :secret, :algorithm, :kid
 
-      # @param algorithm [String] (JwtToken.configuration.jwt_algorithm)
+      # @param algorithm [String] (JwtToken.configuration.algorithm)
       # @param secret [String] (JwtToken.configuration.secret)
       # * automtaically set to algorithm depending default if not provided
       # @param kid [String] (JwtToken.configuration.kid)
       def initialize(secret: nil, algorithm: nil, kid: nil)
-        @algorithm = algorithm || JwtToken.configuration.jwt_algorithm
+        @algorithm = algorithm || JwtToken.configuration.algorithm
         @kid = kid || JwtToken.configuration.kid
 
         @secret = secret || default_secret
@@ -24,10 +24,12 @@ module Studio
       # @param payload [Hash]
       # @return [String]
       def encode(payload)
+
+        options = { typ: "JWT", kid: @kid }.compact
         ::JWT.encode payload,
                      @secret,
                      @algorithm,
-                     { type: "JWT", kid: @kid }
+                     options
       end
 
       # @param jwt_token [String]

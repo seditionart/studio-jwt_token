@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    studio-jwt_token (3.1.2.pre.no.pre.openssl)
+    studio-jwt_token (4.0.0.pre.no.pre.openssl)
       jwt (>= 1.4, < 3.0)
 
 GEM

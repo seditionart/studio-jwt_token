@@ -4,26 +4,26 @@ module Studio
   module JwtToken
     # JwtToken Configuration
     class Configuration
-      attr_accessor :public_key, :private_key, :comment, :jwt_algorithm, :secret, :kid, :domain, :audience
+      attr_accessor :public_key, :private_key, :comment, :algorithm, :secret, :kid, :domain, :audience
 
       # rubocop:disable Metrics
       # @param public_key [String,nil] path to a pem file or string containing an RSA key
       # @param private_key [String,nil] path to a pem file or string containing an RSA key
-      # @param jwt_algorithm [String,nil]
+      # @param algorithm [String,nil]
       # @param kid [String,nil]
       # @param secret [String,nil]
       # @param comment [String,nil]
       def initialize(public_key: nil,
                      private_key: nil,
-                     jwt_algorithm: nil,
+                     algorithm: nil,
                      comment: nil,
                      kid: nil,
                      secret: nil,
                      domain: nil,
                      audience: nil)
-        @jwt_algorithm = jwt_algorithm || ENV.fetch("STUDIO_JWT_ALGORITHM", "RS256")
+        @algorithm = algorithm || ENV.fetch("STUDIO_JWT_ALGORITHM", "HS256")
 
-        @kid = kid || ENV.fetch("STUDIO_JWT_SECRET_KID", SecureRandom.hex)
+        @kid = kid || ENV.fetch("STUDIO_JWT_SECRET_KID", nil) if @algorithm == "RS256"
 
         @domain = domain || ENV.fetch("STUDIO_JWT_AUTH0_DOMAIN", nil)
         @audience = audience || ENV.fetch("STUDIO_JWT_AUTH0_AUDIENCE", nil)
