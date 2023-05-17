@@ -18,16 +18,16 @@ module Studio
       # @param scopes [Array] (["manage:all"])
       # @param iat [Integer] (Time.now.to_i)
       # @param expiry [Integer] (Time.now.to_i + 86_400)
-      def initialize(domain:,
-                     audience:,
+      def initialize(domain: JwtToken.configuration.domain,
+                     audience: JwtToken.configuration.audience,
                      sub: "",
                      azp: SecureRandom.hex,
                      scopes: ["manage:all"],
                      iat: Time.now.to_i,
                      scheme: "https",
                      expiry: (Time.now.to_i + 86_400))
-        @audience = audience || JwtToken.configuration.audience
-        @domain = domain || JwtToken.configuration.domain
+        @audience = audience
+        @domain = domain
         @azp = azp
         @expiry = expiry
         @scheme = scheme
