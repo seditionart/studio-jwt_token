@@ -4,7 +4,7 @@ module Studio
   module JwtToken
     # JwtToken Configuration
     class Configuration
-      attr_accessor :public_key, :private_key, :comment, :jwt_algorithm, :secret, :kid, :domain
+      attr_accessor :public_key, :private_key, :comment, :jwt_algorithm, :secret, :kid, :domain, :audience
 
       # rubocop:disable Metrics
       # @param public_key [String,nil] path to a pem file or string containing an RSA key
