@@ -1,12 +1,15 @@
 # frozen_string_literal: true
 
 require "securerandom"
+require_relative "./shared_configuration"
 
 # rubocop:disable  Metrics/BlockLength
 RSpec.describe Studio::JwtToken::Payload do
+  include_context "shared configuration"
+
   # Using
   let(:domain) { "seditionart-dev.eu.auth0.com" }
-  let(:sub) { "" }
+  let(:sub) { "auth0|0" }
   let(:audience) { "dev/graphql" }
   let(:azp) { SecureRandom.hex }
   let(:scheme) { "https" }
@@ -25,10 +28,6 @@ RSpec.describe Studio::JwtToken::Payload do
                         expiry: expiry
   end
 
-  before do
-    Studio::JwtToken.configure jwt_hmac_secret: OpenSSL::PKey::RSA.generate(2048)
-  end
-
   it "#initialize" do
     expect(payload).to be_an_instance_of described_class
   end
@@ -40,15 +39,22 @@ RSpec.describe Studio::JwtToken::Payload do
 
   it "#token works" do
     expect(payload.token).to be_an_instance_of String
+    puts "--- TOKEN -----------------"
     puts payload.token
   end
 
-  describe "Create a token with the payload" do
-    # let(:jwt_secret) { ENV.fetch("STUDIO_DEV_AUTH0_CLIENT_SECRET", nil) }
-    let(:secret) { OpenSSL::PKey::RSA.generate 2048 }
-    let(:jwt_algorithm) { ENV["STUDIO_JWT_ALGORITHM"] }
+  describe "RS256" do
+    let(:jwt_algorithm) { "RS256" }
 
-    let(:token) { JWT.encode payload.to_h, secret, jwt_algorithm, { typ: "JWT", kid: SecureRandom.hex } }
+    let(:rsa_key) { OpenSSL::PKey::RSA.generate 2048 }
+
+    let(:token) do
+      Studio::JwtToken.encode payload.to_h, secret: rsa_key, algorithm: jwt_algorithm, kid: SecureRandom.hex
+    end
+
+    let(:decoded) do
+      Studio::JwtToken.decode token, secret: rsa_key.public_key, algorithm: jwt_algorithm
+    end
 
     let(:header) do
       {
@@ -61,6 +67,14 @@ RSpec.describe Studio::JwtToken::Payload do
 
     it "#creates token" do
       expect(token).to be_an_instance_of String
+      puts "-- TOKEN ----------------- "
+      puts token
+      puts rsa_key.to_pem
+      puts rsa_key.public_key.to_pem
+    end
+
+    it "decodes" do
+      expect(decoded).to be_an_instance_of Array
     end
   end
 end

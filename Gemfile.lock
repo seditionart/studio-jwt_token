@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    studio-jwt_token (2.2.0)
+    studio-jwt_token (3.0.0)
       jwt (>= 1.4, < 3.0)
       openssl (>= 2.1, < 3.0)
 

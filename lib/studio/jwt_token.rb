@@ -13,8 +13,6 @@ module Studio
     class Invalid < Error; end
     class MatchError < Error; end
 
-    extend Jwt
-
     class << self
       attr_accessor :configuration
 
@@ -27,16 +25,15 @@ module Studio
         configuration
       end
 
-      def generate(payload = {}, **kwargs)
-        jwt_encode(payload, **kwargs)
+      # @param payload [Hash]
+      # @param kwargs (see JwtToken::Jwt#initialize)
+      # @return [String]
+      def encode(payload = {}, **kwargs)
+        JwtToken::Jwt.new(**kwargs).encode(payload)
       end
 
-      def jwt_secret
-        configuration&.jwt_hmac_secret
-      end
-
-      def jwt_algorithm
-        configuration&.jwt_algorithm
+      def decode(token, **kwargs)
+        JwtToken::Jwt.new(**kwargs).decode(token)
       end
 
       # @return [Hash,nil]

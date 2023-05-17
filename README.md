@@ -27,50 +27,50 @@ Create an initializer `studio_auth.rb`
 ```ruby
 Studio::JwtToken.config do |config|
   config.jwt_algorithm = Rails.application.credentials.jwt_token[:jwt_algorithm]
-  config.jwt_hmac_secret = Rails.application.credentials.jwt_token[:jwt_hmac_secret]
-  config.auth_token = Rails.application.credentials.jwt_token[:auth_token]
-  config.payload = Rails.application.credentials.jwt_token[:payload]
+  config.private_key = ...
+  config.public_key = ...
+  config.secret = ...
+  config.domain = ...
+  config.audience = ...
 end
 ```
 
 There is also the option to overwrite all/some of the parameters through environment variables:
 
-* STUDIO_JWT_HMAC_SECRET
 * STUDIO_JWT_ALGORITHM
-* STUDIO_AUTH_TOKEN : the shared access token
+
+For RS2456
+
+* STUDIO_JWT_PRIVATE_KEY
+  * RSA private key
+  * can be key or path to key file
+  * required on client side
+* STUDIO_JWT_PUBLIC_KEY
+  * RSA public key
+  * can be key or path to key file
+  * required on server
+
+For HS2456
+
+* STUDIO_JWT_SECRET
+  * can be key of path to key file
+
+For Auth0
+
+* STUDIO_JWT_AUTH0_DOMAIN
+* STUDIO_JWT_AUTH0_AUDIENCE
 
 ```ruby
-Studio::JwtToken.configure
+Studio::JwtToken.configure do |config|
+  config.jwt_algorithm = ENV['STUDIO_JWT_ALGORITHM']
+  config.private_key = ENV['STUDIO_JWT_PRIVATE_KEY']
+end
 ```
 
-With auth_token only
+### Create token
 
 ```ruby
-Studio::JwtToken.generate
-```
-
-With auth_token and additional payload
-
-```ruby
-Studio::JwtToken.generate { scope: 'artworks', artist: 'Jack Reacher' }
-```
-
-### Get Payload
-
-```ruby
-Studio::JwtToken.jwt_token_payload(jwt_token)
-```
-
-### Compare auth_token with local
-
-```ruby
-Studio::JwtToken.auth_token_match?(jwt_token)
-```
-
-The following raises `Studio::JwtToken::MatchError` if the auth tokens don't math.
-
-```ruby
-Studio::JwtToken.auth_token_match!(jwt_token)
+Studio::JwtToken.encode { scope: 'artworks', artist: 'Jack Reacher' }
 ```
 
 ## Example client request header
@@ -79,10 +79,16 @@ Studio::JwtToken.auth_token_match!(jwt_token)
 
 ```ruby
 def header
+
+  token = Studio::JwtToken::Payload.new(
+    domain: "seditionart-dev.eu.auth0.com",
+    audience: "dev/graphql"
+  ).token
+
   {
     "Content-Type" => "application/json",
     "Cache-Control" => "no-cache",
-    Studio::JwtToken::DEFAULT_HEADER_NAME => "Bearer #{Studio::JwtToken.generate}",
+    "Application => "Bearer #{token}",
     "User-Agent" => Studio::Graphql.configuration.user_agent
   }
 end

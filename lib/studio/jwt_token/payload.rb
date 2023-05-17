@@ -10,34 +10,41 @@ module Studio
       attr_reader :audience, :azp, :domain, :sub, :iat, :expiry, :scopes, :scheme
 
       # rubocop:disable Metrics/ParameterLists
-      # @param domain [String]
-      # @param audience [String]
-      # @param sub [String]
-      # @param azp [String]
+      # @param domain [String] (JwtToken.configuration.domain)
+      # @param audience [String] (JwtToken.configuration.audience)
+      # @param sub [String] ("")
+      # @param azp [String] (SecureRandom.hex)
       # @param scheme [String]
-      # @param scopes [Array]
-      # @param iat [Integer]
-      # @param expiry [Integer]
+      # @param scopes [Array] (["manage:all"])
+      # @param iat [Integer] (Time.now.to_i)
+      # @param expiry [Integer] (Time.now.to_i + 86_400)
       def initialize(domain:,
                      audience:,
                      sub: "",
                      azp: SecureRandom.hex,
-                     scheme: "https",
                      scopes: ["manage:all"],
                      iat: Time.now.to_i,
+                     scheme: "https",
                      expiry: (Time.now.to_i + 86_400))
-        @audience = audience
+        @audience = audience || JwtToken.configuration.audience
+        @domain = domain || JwtToken.configuration.domain
         @azp = azp
-        @domain = domain
         @expiry = expiry
-        @iat = iat
         @scheme = scheme
+        @iat = iat
         @scopes = scopes
         @sub = sub
       end
       # rubocop:enable Metrics/ParameterLists
 
       # @return [Hash]
+      # @example { iss: "https://seditionart-dev.eu.auth0.com/",
+      #            sub: "auth0|0",
+      #            aud: ["dev/graphql", "https://seditionart-dev.eu.auth0.com/userinfo"],
+      #            iat: 1577836800,
+      #            exp: 1577923200,
+      #            azp: "1234567890",
+      #            scope: "openid profile manage:all" }
       def to_h
         {
           iss: "#{scheme}://#{domain}/",
@@ -50,9 +57,10 @@ module Studio
         }
       end
 
+      # @params (see JwtToken::Jwt#initialize)
       # @return [String]
-      def token
-        JwtToken.jwt_encode to_h
+      def token(**kwargs)
+        JwtToken::Jwt.new(**kwargs).encode(to_h)
       end
     end
   end

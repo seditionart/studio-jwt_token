@@ -1,48 +1,57 @@
 # frozen_string_literal: true
 
 require "jwt"
-require "openssl"
 require "securerandom"
 
 module Studio
   # Sedition Website App authentication token.
   module JwtToken
-    # JWT token encoding and decoding methods.
-    module Jwt
+    # JWT wrapper using configuration defaults
+    class Jwt
+      attr_reader :secret, :algorithm, :kid
+
+      # @param algorithm [String] (JwtToken.configuration.jwt_algorithm)
+      # @param secret [String] (JwtToken.configuration.secret)
+      # * automtaically set to algorithm depending default if not provided
+      # @param kid [String] (JwtToken.configuration.kid)
+      def initialize(secret: nil, algorithm: nil, kid: nil)
+        @algorithm = algorithm || JwtToken.configuration.jwt_algorithm
+        @kid = kid || JwtToken.configuration.kid
+
+        @secret = secret || default_secret
+      end
+
       # @param payload [Hash]
-      # @param jwt_token [String]
-      # @param secret [String, OpenSSL::PKey::RSA]
-      # @param algorithm [String]
-      # @param kid [String]
       # @return [String]
-      def jwt_encode(payload,
-                     secret: JwtToken.jwt_secret,
-                     algorithm: JwtToken.jwt_algorithm,
-                     kid: SecureRandom.hex)
-
-        JWT.encode payload,
-                   secret,
-                   algorithm,
-                   { type: "JWT", kid: kid }.compact
+      def encode(payload)
+        ::JWT.encode payload,
+                     @secret,
+                     @algorithm,
+                     { type: "JWT", kid: @kid }
       end
 
       # @param jwt_token [String]
-      # @param secret [String]
-      # @param algorithm [String]
       # @return [Array]
-      def decode(jwt_token,
-                 secret: JwtToken.jwt_secret,
-                 algorithm: JwtToken.jwt_algorithm)
-
-        JWT.decode jwt_token,
-                   secret,
-                   true,
-                   { algorithm: algorithm }
+      def decode(jwt_token)
+        ::JWT.decode jwt_token,
+                     @secret,
+                     true,
+                     { algorithm: @algorithm }
       end
 
-      # def rsa_private
-      #   OpenSSL::PKey::RSA.generate 2048
-      # end
+      private
+
+      # @return [String] depending on the algorithm
+      def default_secret
+        case @algorithm
+        when "RS256"
+          JwtToken.configuration.private_key
+        when "HS256"
+          JwtToken.configuration.secret
+        else
+          raise "Invalid JWT algorithm #{@algorithm}"
+        end
+      end
     end
   end
 end
