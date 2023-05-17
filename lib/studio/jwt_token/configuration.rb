@@ -44,7 +44,7 @@ module Studio
         return unless str.is_a?(String)
 
         rsa_key = File.exist?(str) ? File.read(str) : str
-        OpenSSL::PKey::RSA.new(rsa_key)
+        # OpenSSL::PKey::RSA.new(rsa_key)
       end
     end
   end
