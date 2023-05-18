@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 require "studio/jwt_token"
-require "dotenv/load"
 require "support/fixtures_helper"
+require "dotenv/load"
 
 Dotenv.load(".env.test")
 

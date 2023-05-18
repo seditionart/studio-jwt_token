@@ -39,7 +39,7 @@ There is also the option to overwrite all/some of the parameters through environ
 
 * STUDIO_JWT_ALGORITHM
 
-For RS2456
+#### For RS2456
 
 * STUDIO_JWT_PRIVATE_KEY
   * RSA private key
@@ -50,36 +50,32 @@ For RS2456
   * can be key or path to key file
   * required on server
 
-For HS2456
+#### For HS2456
 
 * STUDIO_JWT_SECRET
   * can be key of path to key file
 
-For Auth0
+#### Payload
 
 * STUDIO_JWT_AUTH0_DOMAIN
 * STUDIO_JWT_AUTH0_AUDIENCE
 
-```ruby
-Studio::JwtToken.configure do |config|
-  config.algorithm = ENV['STUDIO_JWT_ALGORITHM']
-  config.private_key = ENV['STUDIO_JWT_PRIVATE_KEY']
-end
-```
+
+See .env.example for more details.
+
 
 ### Create token
 
-```ruby
-Studio::JwtToken.encode { scope: 'artworks', artist: 'Jack Reacher' }
-```
 
 ## Example client request header
 
 * Using default configuration (`Studio::JwtToken.configuration`) for this example.
 
-```ruby
-def header
+### A sample header for the Cleint
 
+```ruby
+# @return [Hash]
+def header
   token = Studio::JwtToken::Payload.new(
     domain: "seditionart-dev.eu.auth0.com",
     audience: "dev/graphql"
@@ -89,19 +85,16 @@ def header
     "Content-Type" => "application/json",
     "Cache-Control" => "no-cache",
     "Application => "Bearer #{token}",
-    "User-Agent" => Studio::Graphql.configuration.user_agent
+    "User-Agent" => 'Website xyz'
   }
 end
 ```
 
 ## Testing
 
-Copy source .env.sample to .env.test.
-
 ```bash
 bundle exec rspec
 ```
-
 ## Author
 
 Eugen
