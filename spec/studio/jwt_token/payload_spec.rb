@@ -32,15 +32,14 @@ RSpec.describe Studio::JwtToken::Payload do
     expect(payload).to be_an_instance_of described_class
   end
 
-  it "#to_h works" do
+  it "#to_h creates a Hash" do
     expect(payload.to_h).to be_an_instance_of Hash
-    puts JSON.pretty_generate payload.to_h
+    puts JSON.pretty_generate(payload.to_h) if ENV["DEBUG"]
   end
 
-  it "#token works" do
+  it "#token creates a String" do
     expect(payload.token).to be_an_instance_of String
-    puts "--- TOKEN -----------------"
-    puts payload.token
+    puts payload.token if ENV["DEBUG"]
   end
 
   describe "RS256" do
@@ -67,10 +66,12 @@ RSpec.describe Studio::JwtToken::Payload do
 
     it "#creates token" do
       expect(token).to be_an_instance_of String
-      puts "-- TOKEN ----------------- "
-      puts token
-      puts rsa_key.to_pem
-      puts rsa_key.public_key.to_pem
+      if ENV["DEBUG"]
+        puts "-- TOKEN ----------------- "
+        puts token
+        puts rsa_key.to_pem
+        puts rsa_key.public_key.to_pem
+      end
     end
 
     it "decodes" do

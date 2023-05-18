@@ -45,14 +45,14 @@ RSpec.describe Studio::JwtToken do
       described_class.decode jwt_token, secret: secret, algorithm: "HS256"
     end
 
-    it "#encode X" do
+    it "#encode returns String" do
       expect(jwt_token).to be_a_kind_of(String)
-      puts jwt_token
+      puts jwt_token if ENV["DEBUG"]
     end
 
-    it "#decode X" do
+    it "#decode returns Array" do
       expect(decoded).to be_a_kind_of(Array)
-      puts decoded
+      puts decoded if ENV["DEBUG"]
     end
   end
 end

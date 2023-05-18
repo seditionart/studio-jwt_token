@@ -95,6 +95,9 @@ end
 ```bash
 bundle exec rspec
 ```
+
+With DEBUG set test prints additional info like token's, etc.
+
 ## Author
 
 Eugen
