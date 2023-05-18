@@ -2,6 +2,6 @@
 
 module Studio
   module JwtToken
-    VERSION = "4.0.0-no-openssl"
+    VERSION = "4.0.0"
   end
 end

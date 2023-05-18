@@ -43,7 +43,7 @@ module Studio
       def could_be_file_or_rsa_key(str)
         return unless str.is_a?(String)
 
-        rsa_key = File.exist?(str) ? File.read(str) : str
+        File.exist?(str) ? File.read(str) : str
         # OpenSSL::PKey::RSA.new(rsa_key)
       end
     end

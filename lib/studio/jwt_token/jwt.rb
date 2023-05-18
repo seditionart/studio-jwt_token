@@ -24,7 +24,6 @@ module Studio
       # @param payload [Hash]
       # @return [String]
       def encode(payload)
-
         options = { typ: "JWT", kid: @kid }.compact
         ::JWT.encode payload,
                      @secret,
