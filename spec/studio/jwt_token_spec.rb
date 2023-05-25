@@ -7,10 +7,10 @@ RSpec.describe Studio::JwtToken do
   include_context "shared configuration"
 
   let(:payload) { { "key" => "value" } }
-  let(:jwt_token) { described_class.encode(payload) }
+  let(:jwt_token) { described_class::Payload.new(payload).token }
 
   let(:new_value) { "new value" }
-  let(:payload) { { artist: "Michelangelo" } }
+  let(:payload) { { scheme: "https" } }
 
   it "#configure works" do
     described_class.configure do |config|
@@ -20,10 +20,11 @@ RSpec.describe Studio::JwtToken do
   end
 
   describe ".decode" do
-    let(:jwt_token) { described_class.encode(payload) }
+    let(:jwt_token) { described_class::Payload.new(payload).token }
 
     it "decodes additional parameters" do
-      expect(described_class.decode(jwt_token).first.keys).to include "artist"
+      expect(described_class.decode(jwt_token).first.keys).to include(*%w[iss sub aud iat exp azp
+                                                                          scope])
     end
   end
 
@@ -35,7 +36,7 @@ RSpec.describe Studio::JwtToken do
       "MzYwMCwiYXpwIjoiNmRjODI5MGQxMzZkM2M4O"
     end
 
-    let(:payload) { { artist: "Michelangelo" } }
+    let(:payload) { { scheme: "https" } }
 
     let(:jwt_token) do
       described_class.encode payload, secret: secret, algorithm: "HS256", kid: SecureRandom.hex
