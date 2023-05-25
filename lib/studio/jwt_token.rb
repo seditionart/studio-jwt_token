@@ -33,6 +33,9 @@ module Studio
       end
 
       def decode(token, **kwargs)
+        kwargs[:algorithm] ||= JwtToken.configuration.algorithm
+        kwargs[:secret] ||= JwtToken.configuration.secret
+        kwargs[:kid] ||= JwtToken.configuration.kid
         JwtToken::Jwt.new(**kwargs).decode(token)
       end
 
