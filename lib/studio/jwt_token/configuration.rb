@@ -13,22 +13,22 @@ module Studio
       # @param kid [String,nil]
       # @param secret [String,nil]
       # @param comment [String,nil]
-      def initialize(public_key: nil,
+      def initialize(algorithm: "HS256",
+                     public_key: nil,
                      private_key: nil,
-                     algorithm: nil,
                      comment: nil,
                      kid: nil,
                      secret: nil,
                      domain: nil,
                      audience: nil)
-        @algorithm = algorithm || ENV.fetch("STUDIO_JWT_ALGORITHM", "HS256")
+        @algorithm = ENV.fetch("STUDIO_JWT_ALGORITHM", algorithm)
 
-        @kid = kid || ENV.fetch("STUDIO_JWT_SECRET_KID", nil) if @algorithm == "RS256"
+        @kid = ENV.fetch("STUDIO_JWT_SECRET_KID", kid) if @algorithm == "RS256"
 
-        @domain = domain || ENV.fetch("STUDIO_JWT_AUTH0_DOMAIN", nil)
-        @audience = audience || ENV.fetch("STUDIO_JWT_AUTH0_AUDIENCE", nil)
+        @domain = ENV.fetch("STUDIO_JWT_AUTH0_DOMAIN", domain)
+        @audience = ENV.fetch("STUDIO_JWT_AUTH0_AUDIENCE", audience)
 
-        @secret = secret || ENV.fetch("STUDIO_JWT_SECRET", nil)
+        @secret = ENV.fetch("STUDIO_JWT_SECRET", secret)
         @secret = (File.exist?(@secret) ? File.read(@secret) : @secret) if @secret
 
         @private_key = could_be_file_or_rsa_key(private_key || ENV.fetch("STUDIO_JWT_PRIVATE", nil))
